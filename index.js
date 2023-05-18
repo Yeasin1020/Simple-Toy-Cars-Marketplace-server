@@ -32,7 +32,17 @@ async function run() {
 
 	const toysCollection = client.db('Toys-Car').collection('Toys')
 
-
+	app.get('/allToys/:text', async(req, res) => {
+		if(req.params.text == "SportsCar" || req.params.text == "Truck" || req.params.text == "PoliceCar") {
+			const result = await toysCollection
+			.find({category: req.params.text})
+			.toArray();
+			console.log(result)
+			return res.send(result);
+		}
+		const result = await toysCollection.find({}).toArray();
+		res.send(result)
+	})
 
 	app.post('/postToys', async(req, res) => {
 		const body = req.body;

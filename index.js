@@ -40,8 +40,8 @@ async function run() {
 			console.log(result)
 			return res.send(result);
 		}
-		const result = await toysCollection.find({}).toArray();
-		res.send(result)
+		// const result = await toysCollection.find({}).toArray();
+		// res.send(result)
 	})
 
 	app.post('/postToys', async(req, res) => {
@@ -49,13 +49,44 @@ async function run() {
 		const result = await toysCollection.insertOne(body)
 		console.log(result);
 		res.send(result)
+	});
+
+	app.get('/allToy', async(req, res) => {
+		const cursor = toysCollection.find({});
+		const result = await cursor.toArray();
+		res.send(result)
+	});
+
+	// app.get('/toy/:id', async(req, res)=>{
+
+	// 	const id = req.params.id;
+	// 	console.log(id);
+	// 	const selectedToy = toysCollection.find(selectedToy=> selectedToy.id === id);
+	// 	console.log(selectedToy)
+	// 	return res.json(selectedToy)
+	// })
+
+	app.get('/myToys/:email', async(req, res) => {
+		console.log(req.params.email);
+		const result = await toysCollection
+		.find({email: req.params.email})
+		.toArray();
+		res.send(result)
 	})
+
+
+	
 
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
-  } finally {
+  
+	
+
+
+
+} finally {
     // Ensures that the client will close when you finish/error
     // await client.close();
   }

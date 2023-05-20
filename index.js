@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 require('dotenv').config()
 const app = express();
 const port = process.env.PORT || 5000;
@@ -75,7 +75,57 @@ async function run() {
 	})
 
 
-	
+	const indexKeys = {ToysName: 1};
+	const indexOptions = {name:"toysName"};
+
+	const result = await toysCollection.createIndex(indexKeys,
+	indexOptions)
+
+	app.get('/toysSearchByToyName/:text', async(req, res) => {
+		const searchText = req.params.text;
+
+		const result = await toysCollection.find({
+			$or:[
+				{ToysName: {$regex: searchText, $options: "i"}}
+			]})
+		.toArray();
+		res.send(result)
+	});
+
+
+	app.get("/singleToy/:id", async (req, res) => {
+		const id = req.params.id;
+		const query = {
+		  _id: new ObjectId(id),
+		};
+  
+		const options = {
+		  projection: {
+			text: 1,
+			Price: 1,
+			ToysName: 1,
+			category: 1,
+			Url: 1,
+			email: 1,
+			Rating: 1,
+			description: 1,
+			AvailableQuantity: 1,
+			_id: 1,
+		  },
+		};
+  
+		const result = await toysCollection.findOne(query, options);
+		res.send(result);
+	  });
+
+
+	app.delete('/myToyDelete/:id', async(req, res) => {
+		const id = req.params.id;
+		console.log(id)
+		const query = {_id: new ObjectId(id)}
+		const result = await toysCollection.deleteOne(query);
+		res.send(result)
+	})
 
 
     // Send a ping to confirm a successful connection

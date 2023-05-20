@@ -108,7 +108,7 @@ async function run() {
 			Url: 1,
 			email: 1,
 			Rating: 1,
-			description: 1,
+			DetailDescription: 1,
 			AvailableQuantity: 1,
 			_id: 1,
 		  },
@@ -117,6 +117,29 @@ async function run() {
 		const result = await toysCollection.findOne(query, options);
 		res.send(result);
 	  });
+
+	  app.get('/update/:id', async(req, res) => {
+		const id = req.params.id;
+		const query = {_id: new ObjectId(id)}
+		const result = await toysCollection.findOne(query);
+		res.send(result)
+	  });
+
+	  app.put('/update/:id', async(req, res) => {
+		const id = req.params.id;
+		const filter = {_id: new ObjectId(id)}
+		const option = {upsert: true};
+		const updatedToy = req.body;
+		const toy = {
+			$set:{
+				Price: updatedToy.Price,
+				AvailableQuantity: updatedToy.AvailableQuantity,
+				DetailDescription: updatedToy.DetailDescription
+			}
+		}
+		const result = await toysCollection.updateOne(filter, toy, option)
+		res.send(result)
+	})
 
 
 	app.delete('/myToyDelete/:id', async(req, res) => {

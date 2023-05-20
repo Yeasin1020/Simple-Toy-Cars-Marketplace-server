@@ -92,7 +92,7 @@ async function run() {
 		res.send(result)
 	});
 
-
+	//get data by id
 	app.get("/singleToy/:id", async (req, res) => {
 		const id = req.params.id;
 		const query = {
@@ -117,14 +117,14 @@ async function run() {
 		const result = await toysCollection.findOne(query, options);
 		res.send(result);
 	  });
-
+	  //receive data for update data
 	  app.get('/update/:id', async(req, res) => {
 		const id = req.params.id;
 		const query = {_id: new ObjectId(id)}
 		const result = await toysCollection.findOne(query);
 		res.send(result)
 	  });
-
+	  //update data
 	  app.put('/update/:id', async(req, res) => {
 		const id = req.params.id;
 		const filter = {_id: new ObjectId(id)}

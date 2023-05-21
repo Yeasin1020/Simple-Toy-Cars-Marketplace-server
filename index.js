@@ -54,7 +54,8 @@ async function run() {
 	app.get('/allToy', async(req, res) => {
 		const cursor = toysCollection.find({});
 		const result = await cursor.toArray();
-		res.send(result)
+		const parts = result.reverse();
+		res.send(parts)
 	});
 
 	// app.get('/toy/:id', async(req, res)=>{

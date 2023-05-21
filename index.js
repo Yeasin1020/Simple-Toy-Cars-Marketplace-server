@@ -11,7 +11,7 @@ app.use(cors());
 app.use(express.json());
 
 
-
+//user pass
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.pyrxehg.mongodb.net/?retryWrites=true&w=majority`;
 
@@ -42,7 +42,7 @@ async function run() {
 		}
 		// const result = await toysCollection.find({}).toArray();
 		// res.send(result)
-	})
+	});
 
 	app.post('/postToys', async(req, res) => {
 		const body = req.body;
@@ -73,7 +73,7 @@ async function run() {
 		.find({email: req.params.email})
 		.toArray();
 		res.send(result)
-	})
+	});
 
 
 	const indexKeys = {ToysName: 1};
@@ -140,7 +140,7 @@ async function run() {
 		}
 		const result = await toysCollection.updateOne(filter, toy, option)
 		res.send(result)
-	})
+	});
 
 
 	app.delete('/myToyDelete/:id', async(req, res) => {
@@ -149,7 +149,7 @@ async function run() {
 		const query = {_id: new ObjectId(id)}
 		const result = await toysCollection.deleteOne(query);
 		res.send(result)
-	})
+	});
 
 
     // Send a ping to confirm a successful connection
